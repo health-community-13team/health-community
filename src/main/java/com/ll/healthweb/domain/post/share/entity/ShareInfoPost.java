@@ -1,6 +1,6 @@
-package com.ll.healthweb.domain.share.entity;
+package com.ll.healthweb.domain.post.share.entity;
 
-import com.ll.healthweb.domain.comment.entity.Comment;
+import com.ll.healthweb.domain.comment.share.entity.Comment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

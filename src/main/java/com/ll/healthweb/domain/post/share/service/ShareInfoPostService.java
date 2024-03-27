@@ -1,8 +1,8 @@
-package com.ll.healthweb.domain.share.service;
+package com.ll.healthweb.domain.post.share.service;
 
 import com.ll.healthweb.DataNotFoundException;
-import com.ll.healthweb.domain.share.entity.ShareInfoPost;
-import com.ll.healthweb.domain.share.repository.ShareInfoPostRepository;
+import com.ll.healthweb.domain.post.share.entity.ShareInfoPost;
+import com.ll.healthweb.domain.post.share.repository.ShareInfoPostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

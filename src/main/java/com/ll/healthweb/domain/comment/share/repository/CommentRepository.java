@@ -1,6 +1,6 @@
-package com.ll.healthweb.domain.comment.repository;
+package com.ll.healthweb.domain.comment.share.repository;
 
-import com.ll.healthweb.domain.comment.entity.Comment;
+import com.ll.healthweb.domain.comment.share.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

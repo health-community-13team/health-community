@@ -1,4 +1,4 @@
-package com.ll.healthweb.domain.share.Form;
+package com.ll.healthweb.domain.post.share.Form;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

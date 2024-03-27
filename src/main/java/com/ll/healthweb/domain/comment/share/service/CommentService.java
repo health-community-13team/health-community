@@ -1,8 +1,8 @@
-package com.ll.healthweb.domain.comment.service;
+package com.ll.healthweb.domain.comment.share.service;
 
-import com.ll.healthweb.domain.comment.entity.Comment;
-import com.ll.healthweb.domain.comment.repository.CommentRepository;
-import com.ll.healthweb.domain.share.entity.ShareInfoPost;
+import com.ll.healthweb.domain.comment.share.entity.Comment;
+import com.ll.healthweb.domain.comment.share.repository.CommentRepository;
+import com.ll.healthweb.domain.post.share.entity.ShareInfoPost;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

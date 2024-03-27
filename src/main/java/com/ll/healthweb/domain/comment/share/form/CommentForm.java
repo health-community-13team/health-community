@@ -1,4 +1,4 @@
-package com.ll.healthweb.domain.comment.form;
+package com.ll.healthweb.domain.comment.share.form;
 
 
 import jakarta.validation.constraints.NotEmpty;

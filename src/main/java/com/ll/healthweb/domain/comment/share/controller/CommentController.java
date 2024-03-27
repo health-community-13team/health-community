@@ -1,9 +1,9 @@
-package com.ll.healthweb.domain.comment.controller;
+package com.ll.healthweb.domain.comment.share.controller;
 
-import com.ll.healthweb.domain.comment.form.CommentForm;
-import com.ll.healthweb.domain.comment.service.CommentService;
-import com.ll.healthweb.domain.share.entity.ShareInfoPost;
-import com.ll.healthweb.domain.share.service.ShareInfoPostService;
+import com.ll.healthweb.domain.comment.share.form.CommentForm;
+import com.ll.healthweb.domain.comment.share.service.CommentService;
+import com.ll.healthweb.domain.post.share.entity.ShareInfoPost;
+import com.ll.healthweb.domain.post.share.service.ShareInfoPostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

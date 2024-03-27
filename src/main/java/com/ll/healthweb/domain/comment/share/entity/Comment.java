@@ -1,6 +1,6 @@
-package com.ll.healthweb.domain.comment.entity;
+package com.ll.healthweb.domain.comment.share.entity;
 
-import com.ll.healthweb.domain.share.entity.ShareInfoPost;
+import com.ll.healthweb.domain.post.share.entity.ShareInfoPost;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
-package com.ll.healthweb.domain.share.repository;
+package com.ll.healthweb.domain.post.share.repository;
 
-import com.ll.healthweb.domain.share.entity.ShareInfoPost;
+import com.ll.healthweb.domain.post.share.entity.ShareInfoPost;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
