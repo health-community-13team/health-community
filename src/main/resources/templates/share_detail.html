@@ -1,0 +1,37 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <!-- 질문 -->
+    <h2 class="border-bottom py-2" th:text="${shareInfoPost.subject}"></h2>
+    <div class="card my-3">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;" th:text="${shareInfoPost.content}"></div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div th:text="${#temporals.format(shareInfoPost.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 답변의 갯수 표시 -->
+    <h5 class="border-bottom my-3 py-2" th:text="|${#lists.size(shareInfoPost.commentList)}개의 댓글이 있습니다.|"></h5>
+    <!-- 답변 반복 시작 -->
+    <div class="card my-3" th:each="comment : ${shareInfoPost.commentList}">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;" th:text="${comment.content}"></div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 답변 반복 끝  -->
+    <!-- 답변 작성 -->
+    <form th:action="@{|/comment/create/${shareInfoPost.id}|}" th:object="${commentForm}" method="post" class="my-3">
+        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+        <textarea th:field="*{content}" rows="10" class="form-control"></textarea>
+        <input type="submit" value="댓글등록" class="btn btn-primary my-2">
+    </form>
+</div>
+
+</html>
