@@ -37,3 +37,6 @@ out/
 .vscode/
 
 health_dev.mv.db
+health_dev.trace.db
+
+terraform/
