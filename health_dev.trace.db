@@ -1,3 +1,0 @@
-2024-03-26 14:39:55.330509+09:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]SHARE_INFO_POST SHARE_INFO_POST"; expected "SAVEPOINT, SCRIPT, SHUTDOWN"; SQL statement:
-SHARE_INFO_POST SHARE_INFO_POST [42001-224]
