@@ -1,0 +1,22 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    url: jdbc:h2:mem:Health_dev_test;MODE=MYSQL # DB : memory mode
+  jpa:
+    hibernate:
+      ddl-auto: create
+logging:
+  level:
+    com.ll.healthweb: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.extract: TRACE
+    org.springframework.transaction.interceptor: TRACE
+custom:
+  site:
+    baseUrl: "http://localhost:8080"
+  tempDirPath: c:/temp/TdM_test/temp
+  genFile:
+    dirPath: c:/temp/TdM_test

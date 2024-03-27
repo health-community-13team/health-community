@@ -1,0 +1,34 @@
+server:
+  shutdown: graceful
+spring:
+  data:
+    redis:
+      host: 172.17.0.1
+  autoconfigure:
+    exclude: # prod 환경에서는 레디스 포함
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+  datasource:
+    url: jdbc:mysql://172.17.0.1:3306/Health_prod
+    username: lldjlocal
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+logging:
+  level:
+    com.ll.healthweb: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.orm.jdbc.bind: INFO
+    org.hibernate.orm.jdbc.extract: INFO
+    org.springframework.transaction.interceptor: INFO
+custom:
+  site:
+    baseUrl: # 배포 url 넣기
+  temp:
+    dirPath: /app/Health_web_dev/temp
+  genFile:
+    dirPath: /app/Health_web_dev
