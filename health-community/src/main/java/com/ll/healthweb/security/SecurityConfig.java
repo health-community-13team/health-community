@@ -23,7 +23,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         // 정적 리소스들이 보안필터를 거치지 않게끔
-        return (web) -> web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/font/**");
+        return (web) -> web.ignoring().requestMatchers("/css/**", "/js/**", "/img/**", "/font/**");
     }
 
     @Bean
@@ -34,9 +34,9 @@ public class SecurityConfig {
 
         http.authorizeRequests()
                 // 페이지 권한 설정
-                .antMatchers("/member/**").hasRole("USER")
-                .antMatchers("/board/**").hasRole("USER")
-                .antMatchers("/login", "/signup").anonymous()
+                .requestMatchers("/member/**").hasRole("USER")
+                .requestMatchers("/board/**").hasRole("USER")
+                .requestMatchers("/login", "/signup").anonymous()
                 .anyRequest().permitAll();
 
         http.formLogin()
