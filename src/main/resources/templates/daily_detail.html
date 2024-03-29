@@ -4,33 +4,97 @@
     <h2 class="border-bottom py-2" th:text="${dailyCheckPost.subject}"></h2>
     <div class="card my-3">
         <div class="card-body">
-            <div class="card-text" style="white-space: pre-line;" th:text="${dailyCheckPost.content}"></div>
+            <div class="card-text" th:utext="${@commonUtil.markdown(dailyCheckPost.content)}"></div>
             <div class="d-flex justify-content-end">
+                <div th:if="${dailyCheckPost.modifyDate != null}" class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="mb-2">modified at</div>
+                    <div th:text="${#temporals.format(dailyCheckPost.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
                 <div class="badge bg-light text-dark p-2 text-start">
+                    <div class="mb-2">
+                        <span th:if="${dailyCheckPost.author != null}" th:text="${dailyCheckPost.author.username}"></span>
+                    </div>
                     <div th:text="${#temporals.format(dailyCheckPost.createDate, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
+            </div>
+            <div class="my-3">
+                <a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary"
+                   th:data-uri="@{|/daily/vote/${dailyCheckPost.id}|}">
+                    추천
+                    <span class="badge rounded-pill bg-success" th:text="${#lists.size(dailyCheckPost.voter)}"></span>
+                </a>
+                <a th:href="@{|/daily/modify/${dailyCheckPost.id}|}" class="btn btn-sm btn-outline-secondary"
+                   sec:authorize="isAuthenticated()"
+                   th:if="${dailyCheckPost.author != null and #authentication.getPrincipal().getUsername() == dailyCheckPost.author.username}"
+                   th:text="수정"></a>
+                <a href="javascript:void(0);" th:data-uri="@{|/daily/delete/${dailyCheckPost.id}|}"
+                   class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                   th:if="${dailyCheckPost.author != null and #authentication.getPrincipal().getUsername() == dailyCheckPost.author.username}"
+                   th:text="삭제"></a>
             </div>
         </div>
     </div>
     <!-- 답변의 갯수 표시 -->
     <h5 class="border-bottom my-3 py-2"
-        th:text="|${#lists.size(dailyCheckPost.getDailyCheckCommentList())}개의 답변이 있습니다.|"></h5>
+        th:text="|${#lists.size(dailyCheckPost.dailyCheckCommentList)}개의 답변이 있습니다.|"></h5>
     <!-- 답변 반복 시작 -->
-    <div class="card my-3" th:each="comment : ${dailyCheckPost.getDailyCheckCommentList()}">
+    <div class="card my-3" th:each="answer : ${dailyCheckPost.getDailyCheckCommentList()}">
         <div class="card-body">
-            <div class="card-text" style="white-space: pre-line;" th:text="${comment.content}"></div>
+            <div class="card-text" th:utext="${@commonUtil.markdown(answer.content)}"></div>
             <div class="d-flex justify-content-end">
-                <div class="badge bg-light text-dark p-2 text-start">
-                    <div th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                <div th:if="${answer.modifyDate != null}" class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="mb-2">modified at</div>
+                    <div th:text="${#temporals.format(answer.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div class="mb-2">
+                        <span th:if="${answer.author != null}" th:text="${answer.author.username}"></span>
+                    </div>
+                    <div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+            <div class="my-3">
+                <a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary"
+                   th:data-uri="@{|/daily/comment/vote/${answer.id}|}">
+                    추천
+                    <span class="badge rounded-pill bg-success" th:text="${#lists.size(answer.voter)}"></span>
+                </a>
+                <a th:href="@{|/daily/comment/modify/${answer.id}|}" class="btn btn-sm btn-outline-secondary"
+                   sec:authorize="isAuthenticated()"
+                   th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
+                   th:text="수정"></a>
+                <a href="javascript:void(0);" th:data-uri="@{|/daily/comment/delete/${answer.id}|}"
+                   class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                   th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
+                   th:text="삭제"></a>
             </div>
         </div>
     </div>
     <!-- 답변 반복 끝  -->
     <!-- 답변 작성 -->
-    <form th:action="@{|/comment/create/${dailyCheckPost.id}|}" method="post" class="my-3">
-        <textarea name="content" id="content" rows="10" class="form-control"></textarea>
+    <form th:action="@{|/daily/comment/create/${dailyCheckPost.id}|}" th:object="${dailyCheckCommentForm}" method="post" class="my-3">
+        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+        <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
+        <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
         <input type="submit" value="답변등록" class="btn btn-primary my-2">
     </form>
 </div>
+<script layout:fragment="script" type='text/javascript'>
+    const delete_elements = document.getElementsByClassName("delete");
+    Array.from(delete_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+    const recommend_elements = document.getElementsByClassName("recommend");
+    Array.from(recommend_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 추천하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+</script>
 </html>
