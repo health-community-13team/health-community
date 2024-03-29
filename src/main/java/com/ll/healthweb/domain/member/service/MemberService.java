@@ -1,10 +1,13 @@
 package com.ll.healthweb.domain.member.service;
 
+import com.ll.healthweb.DataNotFoundException;
 import com.ll.healthweb.domain.member.entity.Member;
 import com.ll.healthweb.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -20,5 +23,14 @@ public class MemberService {
         memberRepository.save(member);
 
         return member;
+    }
+
+    public Member getUser(String username) {
+        Optional<Member> siteUser = this.memberRepository.findByUsername(username);
+        if (siteUser.isPresent()) {
+            return siteUser.get();
+        } else {
+            throw new DataNotFoundException("member not found");
+        }
     }
 }
