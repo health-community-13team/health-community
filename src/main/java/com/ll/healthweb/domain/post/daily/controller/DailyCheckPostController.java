@@ -57,6 +57,7 @@ public class DailyCheckPostController {
             return "daily_form";
         }
         Member member = memberService.getMember(principal.getName());
+
         dailyCheckPostService.create(dailyCheckPostForm.getSubject(), dailyCheckPostForm.getContent(), member);
         return "redirect:/daily/list"; // 질문 저장후 질문목록으로 이동
     }
@@ -107,4 +108,5 @@ public class DailyCheckPostController {
         this.dailyCheckPostService.vote(question, siteUser);
         return String.format("redirect:/daily/detail/%s", id);
     }
+
 }

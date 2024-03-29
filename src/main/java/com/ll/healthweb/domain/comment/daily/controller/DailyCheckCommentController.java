@@ -35,6 +35,7 @@ public class DailyCheckCommentController {
     public String createDailyCheckPostComment(Model model, @PathVariable("id") Integer id, @Valid DailyCheckCommentForm dailyCheckCommentForm, BindingResult bindingResult, Principal principal) {
         DailyCheckPost dailyCheckPost = dailyCheckPostService.getDailyCheckPost(id);
         Member member = memberService.getMember(principal.getName());
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("dailyCheckPost", dailyCheckPost);
             return "daily_detail";
@@ -86,6 +87,7 @@ public class DailyCheckCommentController {
     public String answerVote(Principal principal, @PathVariable("id") Integer id) {
         DailyCheckComment answer = this.dailyCheckCommentService.getDailyCheckComment(id);
         Member siteUser = this.memberService.getMember(principal.getName());
+
         this.dailyCheckCommentService.vote(answer, siteUser);
         return String.format("redirect:/daily/detail/%s", answer.getDailyCheckPost().getId());
     }
