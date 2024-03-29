@@ -1,16 +1,16 @@
 package com.ll.healthweb.domain.post.share.entity;
 
 import com.ll.healthweb.domain.comment.share.entity.Comment;
+import com.ll.healthweb.domain.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
+@Setter
 @Entity
 @Builder
 @AllArgsConstructor
@@ -39,5 +39,11 @@ public class ShareInfoPost {
 
     @OneToMany(mappedBy = "shareInfoPost", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
+
+    @ManyToMany
+    Set<Member> like;
 
 }
