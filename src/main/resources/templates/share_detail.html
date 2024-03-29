@@ -4,34 +4,99 @@
     <h2 class="border-bottom py-2" th:text="${shareInfoPost.subject}"></h2>
     <div class="card my-3">
         <div class="card-body">
-            <div class="card-text" style="white-space: pre-line;" th:text="${shareInfoPost.content}"></div>
+            <div class="card-text" th:utext="${@commonUtil.markdown(shareInfoPost.content)}"></div>
             <div class="d-flex justify-content-end">
+                <div th:if="${shareInfoPost.modifyDate != null}" class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="mb-2">수정시간</div>
+                    <div th:text="${#temporals.format(shareInfoPost.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
                 <div class="badge bg-light text-dark p-2 text-start">
+                    <div class="mb-2">
+                        <span th:if="${shareInfoPost.member != null}" th:text="${shareInfoPost.member.username}"></span>
+                    </div>
                     <div th:text="${#temporals.format(shareInfoPost.createDate, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- 답변의 갯수 표시 -->
-    <h5 class="border-bottom my-3 py-2" th:text="|${#lists.size(shareInfoPost.commentList)}개의 댓글이 있습니다.|"></h5>
-    <!-- 답변 반복 시작 -->
-    <div class="card my-3" th:each="comment : ${shareInfoPost.commentList}">
-        <div class="card-body">
-            <div class="card-text" style="white-space: pre-line;" th:text="${comment.content}"></div>
-            <div class="d-flex justify-content-end">
-                <div class="badge bg-light text-dark p-2 text-start">
-                    <div th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>
-                </div>
+            <div class="my-3">
+                <a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary"
+                   th:data-uri="@{|/info/like/${shareInfoPost.id}|}">
+                    추천
+                    <span class="badge rounded-pill bg-success" th:text="${#lists.size(shareInfoPost.like)}"></span>
+                </a>
+                <a th:href="@{|/info/modify/${shareInfoPost.id}|}" class="btn btn-sm btn-outline-secondary"
+                   sec:authorize="isAuthenticated()"
+                   th:if="${shareInfoPost.member != null and #authentication.getPrincipal().getUsername() == shareInfoPost.member.username}"
+                   th:text="수정"></a>
+                <a href="javascript:void(0);" th:data-uri="@{|/info/delete/${shareInfoPost.id}|}"
+                   class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                   th:if="${shareInfoPost.member != null and #authentication.getPrincipal().getUsername() == shareInfoPost.member.username}"
+                   th:text="삭제"></a>
             </div>
         </div>
     </div>
-    <!-- 답변 반복 끝  -->
-    <!-- 답변 작성 -->
+    <!-- 댓글의 갯수 표시 -->
+    <h5 class="border-bottom my-3 py-2" th:text="|${#lists.size(shareInfoPost.commentList)}개의 댓글이 있습니다.|"></h5>
+    <!-- 댓글 반복 시작 -->
+    <div class="card my-3" th:each="comment : ${shareInfoPost.commentList}">
+        <a th:id="|comment_${comment.id}|"></a>
+        <div class="card-body">
+            <div class="card-text" th:utext="${@commonUtil.markdown(comment.content)}"></div>
+            <div class="d-flex justify-content-end">
+                <div th:if="${comment.modifyDate != null}" class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="mb-2">수정시간</div>
+                    <div th:text="${#temporals.format(comment.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div class="mb-2">
+                        <span th:if="${comment.member != null}" th:text="${comment.member.username}"></span>
+                    </div>
+                    <div th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+            <div class="my-3">
+                <a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary"
+                   th:data-uri="@{|/comment/like/${comment.id}|}">
+                    추천
+                    <span class="badge rounded-pill bg-success" th:text="${#lists.size(comment.like)}"></span>
+                </a>
+                <a th:href="@{|/comment/modify/${comment.id}|}" class="btn btn-sm btn-outline-secondary"
+                   sec:authorize="isAuthenticated()"
+                   th:if="${comment.member != null and #authentication.getPrincipal().getUsername() == comment.member.username}"
+                   th:text="수정"></a>
+                <a href="javascript:void(0);" th:data-uri="@{|/comment/delete/${comment.id}|}"
+                   class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                   th:if="${comment.member != null and #authentication.getPrincipal().getUsername() == comment.member.username}"
+                   th:text="삭제"></a>
+            </div>
+        </div>
+    </div>
+    <!-- 댓글 반복 끝  -->
+    <!-- 댓글 작성 -->
     <form th:action="@{|/comment/create/${shareInfoPost.id}|}" th:object="${commentForm}" method="post" class="my-3">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
-        <textarea th:field="*{content}" rows="10" class="form-control"></textarea>
+        <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control"
+                  rows="10"></textarea>
+        <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
         <input type="submit" value="댓글등록" class="btn btn-primary my-2">
     </form>
 </div>
+<script layout:fragment="script" type='text/javascript'>
+    const delete_elements = document.getElementsByClassName("delete");
+    Array.from(delete_elements).forEach(function (element) {
+        element.addEventListener('click', function () {
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
 
+    const recommend_elements = document.getElementsByClassName("recommend");
+    Array.from(recommend_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 추천하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+</script>
 </html>

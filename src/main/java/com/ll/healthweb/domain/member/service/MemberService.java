@@ -25,10 +25,10 @@ public class MemberService {
         return member;
     }
 
-    public Member getUser(String username) {
-        Optional<Member> siteUser = this.memberRepository.findByUsername(username);
-        if (siteUser.isPresent()) {
-            return siteUser.get();
+    public Member getMember(String username) {
+        Optional<Member> member = this.memberRepository.findByUsername(username);
+        if (member.isPresent()) {
+            return member.get();
         } else {
             throw new DataNotFoundException("member not found");
         }
