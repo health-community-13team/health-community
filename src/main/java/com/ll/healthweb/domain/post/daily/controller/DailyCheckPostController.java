@@ -56,7 +56,7 @@ public class DailyCheckPostController {
         if (bindingResult.hasErrors()) {
             return "daily_form";
         }
-        Member member = memberService.getUser(principal.getName());
+        Member member = memberService.getMember(principal.getName());
         dailyCheckPostService.create(dailyCheckPostForm.getSubject(), dailyCheckPostForm.getContent(), member);
         return "redirect:/daily/list"; // 질문 저장후 질문목록으로 이동
     }
@@ -97,5 +97,14 @@ public class DailyCheckPostController {
         }
         dailyCheckPostService.delete(dailyCheckPost);
         return "redirect:/";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/vote/{id}")
+    public String questionVote(Principal principal, @PathVariable("id") Integer id) {
+        DailyCheckPost question = this.dailyCheckPostService.getDailyCheckPost(id);
+        Member siteUser = this.memberService.getMember(principal.getName());
+        this.dailyCheckPostService.vote(question, siteUser);
+        return String.format("redirect:/daily/detail/%s", id);
     }
 }
